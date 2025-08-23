@@ -363,16 +363,13 @@
               
               flex-wrap: nowrap;
             }
-            .links {
-                gap: 5px;
-                
-            }
+            
         }
        .dashboard {
   padding: 20px;
   text-align: center;
   background-color: rgb(255, 245, 245);
-  height: 540px;
+  height: 560px;
 }
 
 h1 {
