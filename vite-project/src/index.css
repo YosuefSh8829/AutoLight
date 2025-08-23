@@ -365,11 +365,56 @@
             }
             
         }
+        @media (max-width:450px) {
+           .welcometext {
+                font-size: 32px;
+            }
+            
+            .links {
+                gap: 15px;
+                
+            }
+            
+            .link {
+                font-size: 14px;
+            }
+            
+            .text1 {
+                font-size: 20px;
+            }
+            
+            .text2, .text3 {
+                font-size: 28px;
+            }
+            
+            .auth-box {
+                padding: 1.5rem;
+            }
+            .carimage{
+              height: 200px;
+              width: 300px;
+            }
+            
+            .links{
+              
+              flex-wrap: nowrap;
+            }
+            .dashboard{
+              height: 570px;
+            }
+            .mainbody{
+              height: 570px;
+            }
+            .link{
+           margin-left: 10px;
+            }
+        }
+        
        .dashboard {
   padding: 20px;
   text-align: center;
   background-color: rgb(255, 245, 245);
-  height: 560px;
+  height: 540px;
 }
 
 h1 {
