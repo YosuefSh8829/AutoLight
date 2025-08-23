@@ -355,8 +355,8 @@
                 padding: 1.5rem;
             }
             .carimage{
-              height: 200px;
-              width: 300px;
+              height: 400px;
+              width: 500px;
             }
             
             .links{
@@ -400,7 +400,7 @@
               flex-wrap: nowrap;
             }
             .dashboard{
-              height: 640px;
+              height: 700px;
             }
             .mainbody{
               height: 610px;
