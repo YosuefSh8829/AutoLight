@@ -9,7 +9,7 @@ function Header() {
           <p className='welcometext'>AutoLight</p>
          </div>
          <div className='links'>
-         <Link to="/" className='link'>Home</Link>
+         <Link to="/AutoLight" className='link'>Home</Link>
          <Link to="/dashboard" className='link'>Dashboard</Link>
           <Link to="/login" className='link'>Login</Link>
           <Link to="/signup" className='link'>Sign up</Link>
