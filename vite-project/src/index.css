@@ -202,6 +202,12 @@
 .switch-text a:hover {
   text-decoration: underline;
 }
+.dashboard {
+  padding: 20px;
+  text-align: center;
+  background-color: rgb(255, 245, 245);
+  height: 540px;
+}
 @media (max-width:1400px) {
   .links{
               padding-left: 150px;
@@ -400,7 +406,7 @@
               flex-wrap: nowrap;
             }
             .dashboard{
-              height: 90vh;
+              height: 570px;
             }
             .mainbody{
               height: 610px;
@@ -410,12 +416,7 @@
             }
         }
         
-       .dashboard {
-  padding: 20px;
-  text-align: center;
-  background-color: rgb(255, 245, 245);
-  height: 570px;
-}
+       
 
 h1 {
   color: #333;
