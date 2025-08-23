@@ -16,7 +16,7 @@
 }
 .links{
     display: flex;
-    margin-right: 450px;
+    margin-right: 400px;
     gap: 80px;
     font-weight: bold;
     margin-top: 20px;
@@ -329,7 +329,45 @@
               flex-wrap: nowrap;
             }
         }
-        
+        @media (max-width: 576px){
+          .welcometext {
+                font-size: 32px;
+            }
+            
+            .links {
+                gap: 15px;
+                
+            }
+            
+            .link {
+                font-size: 14px;
+            }
+            
+            .text1 {
+                font-size: 20px;
+            }
+            
+            .text2, .text3 {
+                font-size: 28px;
+            }
+            
+            .auth-box {
+                padding: 1.5rem;
+            }
+            .carimage{
+              height: 200px;
+              width: 300px;
+            }
+            
+            .links{
+              
+              flex-wrap: nowrap;
+            }
+            .links {
+                gap: 5px;
+                
+            }
+        }
        .dashboard {
   padding: 20px;
   text-align: center;
