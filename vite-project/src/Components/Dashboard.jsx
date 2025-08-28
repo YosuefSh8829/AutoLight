@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { IoTContext } from "./context/IoTContext";
 
 export default function Dashboard() {
-  const [cards, setCards] = useState([
-    { title: "Car Sensor", value: "No Car", active: false },
-    { title: "Flame Sensor", value: "No Flame", alert: false },
-    { title: "LRDS Lights", value: "Lights OFF", active: false },
-  ]);
+  const { carDetected, flameDetected, lightsOn } = useContext(IoTContext);
 
-  // Simulate sensor updates (replace with real IoT/MQTT data)
+  const [cards, setCards] = useState([]);
+
+  
   useEffect(() => {
-    const interval = setInterval(() => {
-      const carDetected = Math.random() < 0.5;
-      const flameDetected = Math.random() < 0.1;
-
-      setCards([
-        { title: "Car Sensor", value: carDetected ? "Car Detected 🚗" : "No Car", active: carDetected },
-        { title: "Flame Sensor", value: flameDetected ? "🔥 Flame Detected!" : "No Flame", alert: flameDetected },
-        { title: "LRDS Lights", value: carDetected ? "💡 Lights ON" : "Lights OFF", active: carDetected },
-      ]);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
+    setCards([
+      { title: "Car Sensor", value: carDetected ? "🚗 Car Detected" : "No Car", active: carDetected },
+      { title: "Flame Sensor", value: flameDetected ? "🔥 Flame Detected!" : "No Flame", alert: flameDetected },
+      { title: "LRDS Lights", value: lightsOn ? "💡 Lights ON" : "Lights OFF", active: lightsOn },
+    ]);
+  }, [carDetected, flameDetected, lightsOn]);
 
   return (
     <div className="dashboard">

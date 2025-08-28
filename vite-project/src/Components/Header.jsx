@@ -13,6 +13,7 @@ function Header() {
          <Link to="/dashboard" className='link'>Dashboard</Link>
           <Link to="/login" className='link'>Login</Link>
           <Link to="/signup" className='link'>Sign up</Link>
+          <Link to="/Controlpanel" className='link'>Control</Link>
          </div>
       </div>
     </div>
