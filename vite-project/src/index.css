@@ -375,7 +375,10 @@
                 font-size: 32px;
             }
             
-            
+            .links {
+                gap: 5px;
+                
+            }
             
             .link {
                 font-size: 14px;
