@@ -1,17 +1,36 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IoTContext } from "./context/IoTContext";
+import axios from "axios";
 
 export default function Dashboard() {
-  const { flameDetected, lightsOn, buzzerOn } = useContext(IoTContext);
   const [cards, setCards] = useState([]);
+  const [sensorData, setSensorData] = useState({});
+
+  // Fetch sensor readings from FastAPI
+  useEffect(() => {
+    const fetchSensorData = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/latest-readings");
+        setSensorData(res.data);
+      } catch (err) {
+        console.error("Error fetching sensor data:", err);
+      }
+    };
+
+    fetchSensorData();
+    const interval = setInterval(fetchSensorData, 5000); // Refresh every 5s
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setCards([
-      { title: "Flame Sensor", value: flameDetected ? "🔥 Flame Detected!" : "No Flame", alert: flameDetected },
-      { title: "LRDS Lights", value: lightsOn ? "💡 Lights ON" : "Lights OFF", active: lightsOn },
-      { title: "Buzzer", value: buzzerOn ? "🔊 Buzzer ON" : "Buzzer OFF", active: buzzerOn },
+  
+      { title: "IR1", value: sensorData.ir1 ?? "N/A" },
+      { title: "IR2", value: sensorData.ir2 ?? "N/A" },
+      { title: "LDR", value: sensorData.ldr ?? "N/A" },
+      { title: "Fire Sensor", value: sensorData.fire === 1 ? "🔥 FIRE DETECTED!" : "✅ No Fire" },
     ]);
-  }, [flameDetected, lightsOn, buzzerOn]);
+  }, [sensorData]);
 
   return (
     <div className="dashboard">

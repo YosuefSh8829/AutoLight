@@ -674,3 +674,203 @@ h1 {
   border: 2px solid #ffae42; /* orange border for alerts */
   box-shadow: 0 0 10px rgba(255, 174, 66, 0.7);
 }
+/* Fade in container */
+.fade-in {
+  animation: fadeIn 0.8s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide up box */
+.slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Bounce success */
+.bounce-in {
+  animation: bounceIn 1s ease forwards;
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Shake error */
+.shake {
+  animation: shake 0.6s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
+/* Button loading state */
+.auth-btn.loading {
+  background: #3b82f6;
+  opacity: 0.8;
+  cursor: wait;
+  position: relative;
+}
+
+.auth-btn.loading::after {
+  content: "⏳";
+  position: absolute;
+  right: 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Text styling */
+.success-text {
+  color: #22c55e;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.error-text {
+  color: #ef4444;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}
+/* Form container */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgb(255, 245, 245);
+  padding: 20px;
+}
+
+/* Box styling */
+.auth-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+/* Title */
+.form-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+/* Inputs */
+.form-input {
+  width: 92%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+  background: #fff;
+}
+
+/* Button */
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-btn:hover {
+  background: #2563eb;
+}
+
+.auth-btn.loading {
+  background: #60a5fa;
+  cursor: wait;
+  position: relative;
+}
+
+.auth-btn.loading::after {
+  content: "⏳";
+  position: absolute;
+  right: 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Messages */
+.success-text {
+  color: #22c55e;
+  font-weight: bold;
+  margin-top: 15px;
+  font-size: 1rem;
+}
+
+.error-text {
+  color: #ef4444;
+  font-weight: bold;
+  margin-top: 15px;
+  font-size: 1rem;
+}
+
+.btn-logout {
+  position: relative;
+  margin-left: 60px;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100px;        /* make it wider for pill effect */
+  padding: 8px 16px;   /* spacing */
+  border-radius: 9999px; /* full rounded pill */
+  border: none;
+  background: #ff4b4b;   /* red button */
+  color: white;
+  font-weight: bold;
+  tran
+
+.btn-logout:hover {
+  transform: scale(1.05);
+  background-color: #e11d48;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:active {
+  transform: scale(0.95);
+}

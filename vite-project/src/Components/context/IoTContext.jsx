@@ -4,7 +4,6 @@ export const IoTContext = createContext();
 
 export const IoTProvider = ({ children }) => {
   const [lightsOn, setLightsOn] = useState(false);
-  const [flameDetected, setFlameDetected] = useState(false);
   const [buzzerOn, setBuzzerOn] = useState(false); 
 
   return (
@@ -12,10 +11,8 @@ export const IoTProvider = ({ children }) => {
       value={{
         lightsOn,
         setLightsOn,
-        flameDetected,
-        setFlameDetected,
         buzzerOn,
-        setBuzzerOn, // 🔹 Expose buzzer control
+        setBuzzerOn,
       }}
     >
       {children}

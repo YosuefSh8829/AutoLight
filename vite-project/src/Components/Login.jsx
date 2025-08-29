@@ -1,50 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 
-
-function Login() {
+export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  // 🔹 If user is already logged in, go home
+  useEffect(() => {
+    const session = supabase.auth.getSession();
+    session.then(({ data }) => {
+      if (data.session) {
+        navigate("/"); // already logged in → go home
+      }
+    });
+  }, [navigate]);
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Login form submitted:", form);
-    setIsLoggedIn(true);
+    setError(null);
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        navigate("/"); // ✅ after login → go home
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Email</label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
-            />
-          </div>
+    <div className="auth-container fade-in">
+      <div className="auth-box slide-up">
+        <h2 className="form-title">Login</h2>
+        <form onSubmit={handleSubmit} className="form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+            className="form-input"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+            className="form-input"
+          />
 
-          <div className="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-            />
-          </div>
-
-          <button type="submit" className="auth-btn">Login</button>
+          <button
+            type="submit"
+            className={`auth-btn ${loading ? "loading" : ""}`}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
 
-        {isLoggedIn && (
-          <p className="success-text">✅ Logged in as {form.email}</p>
-        )}
+        {error && <p className="error-text shake">{error}</p>}
       </div>
     </div>
   );
 }
-
-export default Login;

@@ -2,25 +2,54 @@ import React, { useContext, useState } from "react";
 import { IoTContext } from "./context/IoTContext";
 
 export default function ControlSystem() {
-  const {
-    lightsOn,
-    setLightsOn,
-    flameDetected,
-    buzzerOn,
-    setBuzzerOn,
-  } = useContext(IoTContext);
-
+  const { lightsOn, setLightsOn, buzzerOn, setBuzzerOn } = useContext(IoTContext);
   const [messages, setMessages] = useState([
     { from: "bot", text: "Hello 👋, I am your IoT assistant! Ask me anything." },
   ]);
   const [input, setInput] = useState("");
 
-  const toggleLights = () => setLightsOn(!lightsOn);
-  const toggleBuzzer = () => setBuzzerOn(!buzzerOn);
+  const toggleLights = async () => {
+    const newState = !lightsOn;
+    try {
+      await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: `Control LEDs ${newState ? "ON" : "OFF"}` }),
+      });
+      setLightsOn(newState);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const toggleBuzzer = async () => {
+    const newState = !buzzerOn;
+    try {
+      await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: `Control Buzzer ${newState ? "ON" : "OFF"}` }),
+      });
+      setBuzzerOn(newState);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const moveServo = async (angle) => {
+    try {
+      await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: `Move Servo ${angle}` }),
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-
     const userMsg = { from: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
@@ -31,7 +60,6 @@ export default function ControlSystem() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: userMsg.text }),
       });
-
       const data = await res.json();
       const botMsg = { from: "bot", text: data.reply };
       setMessages((prev) => [...prev, botMsg]);
@@ -48,22 +76,31 @@ export default function ControlSystem() {
         {/* Manual Controls */}
         <div className="control-panel">
           <h2>Manual Controls</h2>
-         <button
-    onClick={toggleLights}
-    className={`btn ${lightsOn ? "danger" : ""}`} // 🔹 turn red when lightsOn is true
-  >
-    {lightsOn ? "Turn Lights OFF" : "Turn Lights ON"}
-  </button>
 
+          <button
+            onClick={toggleLights}
+            className={`btn ${lightsOn ? "danger" : ""}`}
+          >
+            {lightsOn ? "Turn Lights OFF" : "Turn Lights ON"}
+          </button>
 
-          <button onClick={toggleBuzzer} className={`btn ${buzzerOn ? "danger" : ""}`}>
+          <button
+            onClick={toggleBuzzer}
+            className={`btn ${buzzerOn ? "danger" : ""}`}
+          >
             {buzzerOn ? "Turn Buzzer OFF" : "Turn Buzzer ON"}
           </button>
 
-          <button onClick={() => console.log("Servo Left")} className="btn">
+          <button
+            onClick={() => moveServo(0)}
+            className="btn"
+          >
             Servo Left
           </button>
-          <button onClick={() => console.log("Servo Right")} className="btn">
+          <button
+            onClick={() => moveServo(90)}
+            className="btn"
+          >
             Servo Right
           </button>
         </div>
