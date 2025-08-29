@@ -6,6 +6,13 @@ import paho.mqtt.client as mqtt
 from langchain.agents import initialize_agent, AgentType, Tool
 from langchain_google_genai import ChatGoogleGenerativeAI
 import uvicorn
+from supabase import create_client, Client
+
+SUPABASE_URL = "https://wczwmlhzsousesecnvnu.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjendtbGh6c291c2VzZWNudm51Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjQxODQ5MSwiZXhwIjoyMDcxOTk0NDkxfQ.Nr5Y9O_0siANu87PPCWEr0jptn5nFyobmde_lBt-VRE"
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 
 # --- MQTT Setup ---
 BROKER = "e10ae8e9b2d54a6d96198879f7d83758.s1.eu.hivemq.cloud"
@@ -40,16 +47,37 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     global latest_ir1, latest_ir2, latest_ldr, latest_fire
     try:
+        sensor_value = int(msg.payload.decode())
+        sensor_name = None
+
         if msg.topic == TOPIC_IR1:
-            latest_ir1 = int(msg.payload.decode())
+            latest_ir1 = sensor_value
+            sensor_name = "ir1"
         elif msg.topic == TOPIC_IR2:
-            latest_ir2 = int(msg.payload.decode())
+            latest_ir2 = sensor_value
+            sensor_name = "ir2"
         elif msg.topic == TOPIC_LDR:
-            latest_ldr = int(msg.payload.decode())
+            latest_ldr = sensor_value
+            sensor_name = "ldr"
         elif msg.topic == TOPIC_FIRE:
-            latest_fire = int(msg.payload.decode())
+            latest_fire = sensor_value
+            sensor_name = "fire"
+
+        # ✅ Insert into Supabase
+        if sensor_name:
+            supabase.table("sensor_readings").insert({
+                "sensor_name": sensor_name,
+                "value": sensor_value
+            }).execute()
+
+            if sensor_name == "fire" and sensor_value == 1:
+                supabase.table("alerts").insert({
+                    "message": "🔥 Fire detected!"
+                }).execute()
+
     except ValueError:
         pass
+
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message

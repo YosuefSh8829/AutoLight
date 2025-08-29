@@ -1,68 +1,79 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { IoTContext } from "./context/IoTContext";
 
 export default function ControlSystem() {
-  const [messages, setMessages] = useState([]);
+  const {
+    lightsOn,
+    setLightsOn,
+    flameDetected,
+    buzzerOn,
+    setBuzzerOn,
+  } = useContext(IoTContext);
+
+  const [messages, setMessages] = useState([
+    { from: "bot", text: "Hello 👋, I am your IoT assistant! Ask me anything." },
+  ]);
   const [input, setInput] = useState("");
 
-  // === Send chat message to FastAPI ===
+  const toggleLights = () => setLightsOn(!lightsOn);
+  const toggleBuzzer = () => setBuzzerOn(!buzzerOn);
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { text: input, sender: "user" };
+    const userMsg = { from: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
+    setInput("");
 
     try {
       const res = await fetch("http://localhost:8000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: input }),
+        body: JSON.stringify({ text: userMsg.text }),
       });
 
       const data = await res.json();
-      const botMsg = { text: data.reply, sender: "bot" };
+      const botMsg = { from: "bot", text: data.reply };
       setMessages((prev) => [...prev, botMsg]);
     } catch (error) {
-      const errorMsg = { text: "⚠️ Backend not reachable!", sender: "bot" };
+      const errorMsg = { from: "bot", text: "⚠️ Backend not reachable!" };
       setMessages((prev) => [...prev, errorMsg]);
     }
-
-    setInput("");
-  };
-
-  // === Control button logic ===
-  const handleControl = (action) => {
-    console.log(`Action: ${action}`);
-    // here you could also call FastAPI for manual control
   };
 
   return (
     <div className="control-system">
       <h1>IoT Control System</h1>
       <div className="system-grid">
-        
-        {/* Control Panel */}
+        {/* Manual Controls */}
         <div className="control-panel">
-          <h2>Controls</h2>
-          <button className="btn" onClick={() => handleControl("lights-on")}>
-            Turn Lights On
+          <h2>Manual Controls</h2>
+         <button
+    onClick={toggleLights}
+    className={`btn ${lightsOn ? "danger" : ""}`} // 🔹 turn red when lightsOn is true
+  >
+    {lightsOn ? "Turn Lights OFF" : "Turn Lights ON"}
+  </button>
+
+
+          <button onClick={toggleBuzzer} className={`btn ${buzzerOn ? "danger" : ""}`}>
+            {buzzerOn ? "Turn Buzzer OFF" : "Turn Buzzer ON"}
           </button>
-          <button className="btn danger" onClick={() => handleControl("lights-off")}>
-            Turn Lights Off
-          </button>
-          <button className="btn" onClick={() => handleControl("servo-left")}>
+
+          <button onClick={() => console.log("Servo Left")} className="btn">
             Servo Left
           </button>
-          <button className="btn" onClick={() => handleControl("servo-right")}>
+          <button onClick={() => console.log("Servo Right")} className="btn">
             Servo Right
           </button>
         </div>
 
-        {/* Chatbot */}
+        {/* Chatbot Assistant */}
         <div className="chatbot">
-          <h2>IoT Chatbot Assistant</h2>
+          <h2>Chatbot Assistant 🤖</h2>
           <div className="chat-box">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`msg ${msg.sender}`}>
+            {messages.map((msg, i) => (
+              <div key={i} className={`msg ${msg.from}`}>
                 {msg.text}
               </div>
             ))}
@@ -72,13 +83,12 @@ export default function ControlSystem() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask me about sensors or control..."
+              placeholder="Ask me about sensors or controls..."
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
             <button onClick={sendMessage}>Send</button>
           </div>
         </div>
-
       </div>
     </div>
   );
