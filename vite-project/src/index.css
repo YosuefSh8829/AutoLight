@@ -633,3 +633,44 @@ h1 {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Fade-in animation for cards */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard .cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 200px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: background-color 0.5s, transform 0.3s;
+  opacity: 0; /* start invisible for fade-in */
+}
+
+.card.animate-card {
+  animation: fadeInUp 0.5s forwards;
+}
+
+.card.active {
+  background-color: #ff4d4d; /* red when active */
+  color: white;
+}
+
+.card.alert {
+  border: 2px solid #ffae42; /* orange border for alerts */
+  box-shadow: 0 0 10px rgba(255, 174, 66, 0.7);
+}
